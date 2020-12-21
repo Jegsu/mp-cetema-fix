@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "mp-cetema",
+    "slug": "mp-cetema",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "userInterfaceStyle": "automatic"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBhM7GLRK4C9encaryTEky07Tid5DZoZYk"
+        }
+      },
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ],
+      "package": "com.jegsu.mpcetema"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "description": "Mobile Project for Cetema",
+    "githubUrl": "https://github.com/Jegsu/Cetema-Mobile-Project"
+  }
+}

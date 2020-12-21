@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - node
+  - lts/*
+before_script:
+  - npm i mocha -g
+  - npm i yarn -g
+  - yarn install
+script:
+  - yarn test
