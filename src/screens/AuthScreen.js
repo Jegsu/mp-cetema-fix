@@ -71,9 +71,10 @@ const AuthScreen = () => {
               }
             });
         } catch (err) {
-          Alert.alert(err);
+          console.log(err)
+          Alert.alert("Something went wrong...");
         }
-        Alert.alert(`Welcome ${firebase.auth().currentUser.displayName}!`);
+        //Alert.alert(`Welcome ${firebase.auth().currentUser.displayName}!`);
       } else Alert.alert("Passwords do not match");
     } else Alert.alert("Fill every field");
   };

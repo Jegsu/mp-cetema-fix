@@ -12,12 +12,6 @@ const LocationContextProvider = (props) => {
   const [initRegion, setInitRegion] = useState(null)
   const [userSpeed, setUserSpeed] = useState(0);
 
-  // bbox
-  const [userWestLong, setUserWestLong] = useState(null)
-  const [userSouthLat, setUserSouthLat] = useState(null)
-  const [userEastLong, setUserEastLong] = useState(null)
-  const [userNorthLat, setUserNorthLat] = useState(null)
-
   // calculate deltas with fixed value
   let { width, height } = Dimensions.get('window');
   const ASPECT_RATIO = width / height;
@@ -43,7 +37,6 @@ const LocationContextProvider = (props) => {
                 longitudeDelta: LONGITUDE_DELTA
               };
               setInitRegion(lastRegion)
-              setBoundingBox(location)
             } else {
               const defaultRegion = {
                 latitude: 60.1587262,
@@ -77,19 +70,12 @@ const LocationContextProvider = (props) => {
     }
   }
 
-  const setBoundingBox = (location) => {
-    setUserWestLong(location.coords.longitude - LONGITUDE_DELTA / 2),
-      setUserSouthLat(location.coords.latitude - LATITUDE_DELTA / 2),
-      setUserEastLong(location.coords.longitude + LONGITUDE_DELTA / 2),
-      setUserNorthLat(location.coords.latitude + LATITUDE_DELTA / 2)
-  }
-
   useEffect(() => {
     initLocation()
   }, []);
 
   return (
-    <LocationContext.Provider value={{ locationState, userLocation, userLatitude, userLongitude, userSpeed, initRegion, userWestLong, userSouthLat, userEastLong, userNorthLat }} >
+    <LocationContext.Provider value={{ locationState, userLocation, userLatitude, userLongitude, userSpeed, initRegion }} >
       { props.children}
     </LocationContext.Provider>
   )

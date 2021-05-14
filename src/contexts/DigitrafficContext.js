@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useContext, useState, useEffect, createContext } from "react";
 import { LocationContext } from "./LocationContext";
-import useInterval from "./useInterval";
+import useInterval from "../helpers/useInterval";
 
 const DigitrafficContext = createContext()
 

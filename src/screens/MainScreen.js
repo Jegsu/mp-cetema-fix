@@ -10,15 +10,14 @@ import Speedometer from "react-native-speedometer-chart";
 import ShipMarkers from "../components/ShipMarkers";
 import UserMarkers from "../components/UserMarkers";
 import NauticalWarnings from "../components/NauticalWarnings";
-import ThemeContext from "../helpers/ThemeContext";
+import { ThemeContext } from "../contexts/ThemeContext";
 import { GeoFirestore } from "../config/Firebase"
-import { LocationContext } from "../helpers/LocationContext";
-import { DigitrafficContext } from "../helpers/DigitrafficContext";
-import RestrictionZone from "../components/RestrictionZone";
+import { LocationContext } from "../contexts/LocationContext";
+import { DigitrafficContext } from "../contexts/DigitrafficContext";
 
 const MainScreen = () => {
 
-  const { locationState, userLocation, userLatitude, userLongitude, userSpeed, initRegion, userWestLong, userSouthLat, userEastLong, userNorthLat } = useContext(LocationContext)
+  const { locationState, userLocation, userLatitude, userLongitude, userSpeed, initRegion } = useContext(LocationContext)
   const { shipMarkers, nauticalWarnings } = useContext(DigitrafficContext)
 
   const { isDarkTheme } = useContext(ThemeContext);
@@ -30,45 +29,6 @@ const MainScreen = () => {
   const [followUserActive, setFollowUserActive] = useState(false);
   const [collisionDetected, setCollisionDetected] = useState(false);
   const [userWithinRadius, setUserWithinRadius] = useState([]);
-  const [polygons, setPolygons] = useState([]);
-
-  // todo
-  // add "Turvalaitteet", "Navigointilinjat" tba
-  // move code to hook or context
-  // only fetch certain types
-  const fetchPolygons = () => {
-    if (userWestLong && userSouthLat && userEastLong && userNorthLat) {
-      fetch(`https://julkinen.vayla.fi/inspirepalvelu/wfs?request=getfeature&typename=avoin:rajoitusalue_a&outputformat=application/json&&SRSName=EPSG:4258&BBOX=${userWestLong},${userSouthLat},${userEastLong},${userNorthLat},EPSG:4258`)
-        .then(response => response.json())
-        .then(data => {
-          let array = []
-          for (let i = 0; i < data.features.length; i++) {
-            const coordPath = data.features[i].geometry.coordinates[0];
-            const propPath = data.features[i].properties
-
-            const properties = {
-              restrictionType: propPath.RAJOITUSTYYPIT,
-              restrictionAmount: propPath.SUURUUS,
-              restrictionLocation: propPath.NIMI_SIJAINTI,
-              restrictionGranter: propPath.MERK_VAST
-            }
-
-            let coordinates = [];
-            for (let o = 0; o < coordPath.length; o++) {
-              coordinates.push({
-                latitude: coordPath[o][1],
-                longitude: coordPath[o][0]
-              });
-            }
-            array.push({
-              coordinates: coordinates,
-              properties: properties
-            })
-          }
-          setPolygons(array)
-        })
-    }
-  }
 
   const getUserMarkers = async () => {
     // last 15 minutes
@@ -359,7 +319,6 @@ const MainScreen = () => {
     if (locationState) {
       getSosAlert();
       getUserMarkers();
-      fetchPolygons();
     }
   }, [locationState]);
 
@@ -410,8 +369,6 @@ const MainScreen = () => {
           <UserMarkers markers={userMarkers} uid={firebase.auth().currentUser.uid} />
 
           <NauticalWarnings warnings={nauticalWarnings} active={nauticalWarningsActive} />
-
-          <RestrictionZone polygons={polygons} />
 
         </MapView>
         <View style={styles.speedometerContainer}>
@@ -478,8 +435,8 @@ const MainScreen = () => {
             {followUserActive === false ? (
               <Icon name="md-navigate" />
             ) : (
-                <Icon color="red" name="md-close" />
-              )}
+              <Icon color="red" name="md-close" />
+            )}
           </Button>
         </Fab>
       </View>

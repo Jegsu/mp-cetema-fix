@@ -15,11 +15,9 @@ import {
 } from "native-base";
 import * as firebase from "firebase";
 import { useTheme } from "@react-navigation/native";
-import { Alert } from "react-native";
-import { Switch, TouchableRipple } from "react-native-paper";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import ThemeContext from "../helpers/ThemeContext";
-import { DigitrafficContext } from "../helpers/DigitrafficContext";
+import { DigitrafficContext } from "../contexts/DigitrafficContext";
+import { ThemeContext } from "../contexts/ThemeContext";
+import { Switch, TouchableOpacity } from "react-native";
 
 const SettingsScreen = (props) => {
 
@@ -32,7 +30,6 @@ const SettingsScreen = (props) => {
 
   const { isDarkTheme, toggleTheme } = useContext(ThemeContext);
   const { fetchRadius, fetchTime, fetchInterval, updateFetchRadius, updateFetchTime, updateFetchInterval } = useContext(DigitrafficContext)
-
 
   useEffect(() => {
     setBoatName(firebase.auth().currentUser.displayName);
@@ -97,7 +94,7 @@ const SettingsScreen = (props) => {
             <Text style={{ color: colors.text }}>App settings</Text>
           </CardItem>
           <CardItem style={{ backgroundColor: colors.background }}>
-            <TouchableRipple>
+            <TouchableOpacity>
               <View style={{ flexDirection: 'row' }}>
                 <Text style={{ color: colors.text, paddingTop: 2, paddingRight: "3%" }}>Toggle Dark Theme</Text>
                 <Switch
@@ -105,7 +102,7 @@ const SettingsScreen = (props) => {
                   onValueChange={toggleTheme}
                 />
               </View>
-            </TouchableRipple>
+            </TouchableOpacity>
           </CardItem>
           <Form style={{ backgroundColor: colors.background }}>
             <Item stackedLabel>
@@ -167,14 +164,6 @@ const SettingsScreen = (props) => {
             </Item>
           </Form>
         </Card>
-        <Button
-          info
-          transparent
-          block
-          onPress={() => props.navigation.navigate("About")}
-        >
-          <Text>About</Text>
-        </Button>
       </Content>
     </Container>
   );

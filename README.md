@@ -28,4 +28,8 @@ For publishing app to expo.io:
 expo publish
 ```
 
-## :warning: Expo build might not work.
+## Expo Build
+
+```
+https://expo.io/@jegsu/projects/mp-cetema
+```
