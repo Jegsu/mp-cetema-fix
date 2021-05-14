@@ -3,13 +3,7 @@ import { Text } from "native-base";
 import { Marker, Callout } from "react-native-maps";
 import { StyleSheet } from "react-native";
 
-import userIcon from "../../assets/usericon.png"
-import helpIcon from "../../assets/help.png"
-
 const UserMarkers = ({ markers, uid }) => {
-
-    // filter current user from the array because we show it with
-    // showsUserLocation={true}
 
     return (
         markers && markers.filter(markers => uid !== markers.uid).map((markers, i) => (
@@ -21,7 +15,7 @@ const UserMarkers = ({ markers, uid }) => {
                 }}
                 title={markers.username}
                 description={`type: ${markers.boatType}, name: ${markers.boatName}, time: ${(Date.now() - markers.timestamp) / 1000}s ago`}
-                image={markers.needsRescue === true ? helpIcon : userIcon}
+                pinColor={markers.needsRescue === true ? 'white' : 'red'}
             >
                 <Callout>
                     <Text style={styles.textStyle}> {markers.username} </Text>

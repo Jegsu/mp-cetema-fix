@@ -25,8 +25,6 @@ const LocationContextProvider = (props) => {
       Alert.alert("Location Error", "Location permissions are needed to run the app");
     } else {
       try {
-        // getLastKnownPositionAsync({}) may be used when bbox is calculated better
-        // setting initial region this way might work, needs testing
         Location.getCurrentPositionAsync({})
           .then(location => {
             if (location) {
@@ -52,7 +50,7 @@ const LocationContextProvider = (props) => {
 
         // should update if location changes by 20m and every 5s
         // but doesn't work properly, because distanceinterval overrites timeinterval, big suck
-        Location.watchPositionAsync({
+        await Location.watchPositionAsync({
           accuracy: Location.Accuracy.Highest,
           timeInterval: 5000,
           distanceInterval: 20
@@ -75,7 +73,7 @@ const LocationContextProvider = (props) => {
   }, []);
 
   return (
-    <LocationContext.Provider value={{ locationState, userLocation, userLatitude, userLongitude, userSpeed, initRegion }} >
+    <LocationContext.Provider value={{ locationState, userLocation, userLatitude, userLongitude, userSpeed, initRegion, initLocation }} >
       { props.children}
     </LocationContext.Provider>
   )

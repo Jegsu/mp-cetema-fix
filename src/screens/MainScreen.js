@@ -17,13 +17,11 @@ import { DigitrafficContext } from "../contexts/DigitrafficContext";
 
 const MainScreen = () => {
 
-  const { locationState, userLocation, userLatitude, userLongitude, userSpeed, initRegion } = useContext(LocationContext)
+  const { locationState, userLocation, userLatitude, userLongitude, userSpeed, initRegion, initLocation } = useContext(LocationContext)
   const { shipMarkers, nauticalWarnings } = useContext(DigitrafficContext)
 
   const { isDarkTheme } = useContext(ThemeContext);
   const [userMarkers, setUserMarkers] = useState([]);
-  const [shipMarkersActive, setShipMarkersActive] = useState(true);
-  const [nauticalWarningsActive, setNauticalWarningsActive] = useState(true);
   const [active, setActive] = useState(false);
   const [isSendingSosAlert, setIsSendingSosAlert] = useState(false);
   const [followUserActive, setFollowUserActive] = useState(false);
@@ -299,17 +297,9 @@ const MainScreen = () => {
     }
   };
 
-  const toggleShipMarkers = () => {
-    setShipMarkersActive(isActive => !isActive);
-  };
-
   const toggleFollowUser = () => {
     setFollowUserActive(!followUserActive);
   };
-
-  const toggleNauticalWarnings = () => {
-    setNauticalWarningsActive(isActive => !isActive)
-  }
 
   useEffect(() => {
     receiveUpdatesOnSosAlert();
@@ -353,8 +343,8 @@ const MainScreen = () => {
               ? {
                 latitude: userLatitude,
                 longitude: userLongitude,
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LONGITUDE_DELTA
+                latitudeDelta: initRegion.latitudeDelta,
+                longitudeDelta: initRegion.longitudeDelta
               }
               : null
           }
@@ -364,11 +354,11 @@ const MainScreen = () => {
           showsUserLocation={true}
         >
 
-          <ShipMarkers markers={shipMarkers} active={shipMarkersActive} />
+          <ShipMarkers markers={shipMarkers} />
 
           <UserMarkers markers={userMarkers} uid={firebase.auth().currentUser.uid} />
 
-          <NauticalWarnings warnings={nauticalWarnings} active={nauticalWarningsActive} />
+          <NauticalWarnings warnings={nauticalWarnings} />
 
         </MapView>
         <View style={styles.speedometerContainer}>
@@ -408,36 +398,8 @@ const MainScreen = () => {
           containerStyle={{}}
           style={styles.fabStyle}
           position="bottomLeft"
-          onPress={() => setActive(!active)}>
-          <Icon name="md-arrow-up" />
-          <Button
-            style={{
-              backgroundColor: "#34A34F",
-              marginBottom: 45
-            }}
-            onPress={() => toggleShipMarkers()}>
-            <Icon name="boat" />
-          </Button>
-          <Button
-            style={{
-              backgroundColor: "#3B5998",
-              marginBottom: 50
-            }}
-            onPress={() => toggleNauticalWarnings()}>
-            <Icon name="warning" />
-          </Button>
-          <Button
-            style={{
-              backgroundColor: "#5ADFFF",
-              marginBottom: 55
-            }}
-            onPress={() => toggleFollowUser()}>
-            {followUserActive === false ? (
-              <Icon name="md-navigate" />
-            ) : (
-              <Icon color="red" name="md-close" />
-            )}
-          </Button>
+          onPress={() => locationState ? toggleFollowUser() : initLocation()}>
+          {locationState ? followUserActive === false ? (<Icon name="md-navigate" />) : (<Icon name="md-close" />) : <Icon name="md-locate" />}
         </Fab>
       </View>
     </Container>
